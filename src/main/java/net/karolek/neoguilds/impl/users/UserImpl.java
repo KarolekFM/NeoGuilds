@@ -5,7 +5,6 @@ import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.users.User;
 import net.karolek.neoguilds.api.users.data.UserData;
 import net.karolek.neoguilds.impl.users.data.UserDataImpl;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -39,11 +38,6 @@ public class UserImpl implements User {
     @Override
     public UUID getUUID() {
         return this.uuid;
-    }
-
-    @Override
-    public Player getPlayer() {
-        return Bukkit.getPlayer(uuid);
     }
 
     @Override

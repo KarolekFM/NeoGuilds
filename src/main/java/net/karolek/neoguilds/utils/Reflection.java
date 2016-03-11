@@ -156,6 +156,7 @@ public final class Reflection {
     }
 
     public static ConstructorInvoker getConstructor(Class<?> clazz, Class<?>... params) {
+
         for (final Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             if (Arrays.equals(constructor.getParameterTypes(), params)) {
                 constructor.setAccessible(true);

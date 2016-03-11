@@ -1,12 +1,19 @@
 package net.karolek.neoguilds.impl.users.data;
 
+import lombok.Getter;
+import lombok.Setter;
+import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.Profile;
+import net.karolek.neoguilds.api.packets.PlayerInfoAction;
 import net.karolek.neoguilds.api.users.User;
 import net.karolek.neoguilds.api.users.data.extension.TabData;
 import net.karolek.neoguilds.utils.Util;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+@Getter
+@Setter
 public class TabDataImpl extends UserDataImpl implements TabData {
 
     private static final int ROWS = 20;
@@ -15,23 +22,24 @@ public class TabDataImpl extends UserDataImpl implements TabData {
 
     static {
         int base = 97;
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 20; j++) {
-                char first = (char) (base + i);
-                char second = (char) (base + j);
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLUMNS; col++) {
+                char first = (char) (base + col);
+                char second = (char) (base + row);
                 String name = "!!UPDATEMC" + first + "" + second;
-                PROFILES[i][j] = new Profile(UUID.randomUUID(), name);
+                PROFILES[row][col] = new Profile(UUID.randomUUID(), name);
             }
         }
     }
 
     private final String[][] slots = new String[ROWS][COLUMNS];
     private boolean locked = false;
+    private Player player;
 
     public TabDataImpl(User user) {
         super(user);
-        for (int col = 0; col < 4; col++) {
-            for (int row = 0; row < 20; row++) {
+        for (int col = 0; col < COLUMNS; col++) {
+            for (int row = 0; row < ROWS; row++) {
                 this.slots[row][col] = "";
             }
         }
@@ -40,11 +48,11 @@ public class TabDataImpl extends UserDataImpl implements TabData {
     @Override
     public void sendTab() {
         locked = true;
-        for (int col = 3; col >= 0; col--) {
-            for (int row = 19; row >= 0; row--) {
-                Profile profile = PROFILES[col][row];
-                String slot = this.slots[col][row];
-                //PacketUtil.sendPacket(this.player, new Object[] { TabUtil.createPlayerPacket(profile, slot.getText()) });
+        for (int col = 0; col < COLUMNS; col++) {
+            for (int row = 0; row < ROWS; row++) {
+                Profile profile = PROFILES[row][col];
+                String slot = this.slots[row][col];
+                NeoAPI.getPacketManager().sendPlayerListPacket(getPlayer(), profile, slot, PlayerInfoAction.ADD_PLAYER);
             }
         }
     }
@@ -53,19 +61,18 @@ public class TabDataImpl extends UserDataImpl implements TabData {
     public void setSlot(int row, int column, String text) {
         if (locked)
             throw new IllegalArgumentException("Can not set slot after tab send!");
-        this.slots[column][row] = Util.fixColor(text);
+        this.slots[row][column] = Util.fixColor(text);
     }
 
     @Override
     public void updateSlot(int row, int column, String text) {
-        this.slots[column][row] = Util.fixColor(text);
-
-        // PacketUtil.sendPacket(this.player, new Object[] { TabUtil.updatePlayerPacket(PROFILES[column][row], slot.getText()) });
+        this.slots[row][column] = Util.fixColor(text);
+        NeoAPI.getPacketManager().sendPlayerListPacket(getPlayer(), PROFILES[row][column], slots[row][column], PlayerInfoAction.UPDATE_DISPLAY_NAME);
     }
 
     @Override
     public void setHeaderAndFooter(String header, String footer) {
-        //PacketUtil.sendPacket(this.player, new Object[] { TabUtil.createHeaderPacket(header, footer) });
+        NeoAPI.getPacketManager().sendTablistHeaderPacket(getPlayer(), header, footer);
     }
 
     @Override

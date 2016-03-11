@@ -1,4 +1,4 @@
-package net.karolek.neoguilds.packets;
+package net.karolek.neoguilds.api.packets;
 
 public enum PlayerInfoAction {
 
