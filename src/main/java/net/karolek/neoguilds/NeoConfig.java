@@ -22,6 +22,12 @@ public class NeoConfig extends Configuration {
     @Comment(value = "nazwa bazy danych")
     public static String MYSQL_BASE = "sid1947_karolek";
 
+    @Comment(value = "prefiks tabel mysql")
+    public static String MYSQL_PREFIX = "neoguilds_";
+
+    @Comment(value = "startowa ilosc punktow rankingu gracza")
+    public static int RANKING_START$POINTS = 1000;
+
     public NeoConfig(JavaPlugin plugin) {
         super(plugin, "config.yml", "config.");
     }

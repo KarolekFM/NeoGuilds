@@ -2,6 +2,7 @@ package net.karolek.neoguilds;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.karolek.neoguilds.api.users.data.DataFactory;
 import net.karolek.store.Store;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,12 +10,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 @Setter
 public class NeoGuilds extends JavaPlugin {
 
+    private DataFactory dataFactory;
     private NeoConfig neoConfig;
     private NeoLang neoLang;
     private Store store;
 
     @Override
     public void onLoad() {
+        dataFactory = new DataFactory();
     }
 
     @Override
