@@ -1,5 +1,7 @@
 package net.karolek.neoguilds.api.users.data;
 
+import net.karolek.neoguilds.impl.users.data.UserDataImpl;
+
 import java.util.HashMap;
 import java.util.Map;
 

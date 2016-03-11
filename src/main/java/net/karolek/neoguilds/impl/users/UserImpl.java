@@ -4,7 +4,8 @@ import lombok.Getter;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.users.User;
 import net.karolek.neoguilds.api.users.data.UserData;
-import net.karolek.neoguilds.api.users.data.UserDataImpl;
+import net.karolek.neoguilds.impl.users.data.UserDataImpl;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -41,8 +42,13 @@ public class UserImpl implements User {
     }
 
     @Override
-    public void setData(Class<? extends UserData> clazz, UserData userData) {
-        this.userData.put(clazz, userData);
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
+    }
+
+    @Override
+    public <T extends UserData> void setData(Class<T> clazz, T t) {
+        this.userData.put(clazz, t);
     }
 
     @Override
@@ -51,7 +57,7 @@ public class UserImpl implements User {
             Class<? extends UserDataImpl> c = NeoAPI.getDataFactory().getFactory(clazz);
             try {
                 UserData data = c.getConstructor(User.class).newInstance(this);
-                setData(clazz, data);
+                setData(clazz, (T) data);
             } catch (Exception e) {
                 e.printStackTrace();
             }

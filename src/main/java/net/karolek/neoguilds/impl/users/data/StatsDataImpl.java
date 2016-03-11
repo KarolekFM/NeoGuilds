@@ -5,7 +5,6 @@ import lombok.Setter;
 import net.karolek.neoguilds.NeoConfig;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.users.User;
-import net.karolek.neoguilds.api.users.data.UserDataImpl;
 import net.karolek.neoguilds.api.users.data.extension.StatsData;
 import net.karolek.store.Queries;
 import net.karolek.store.common.QueryCallback;

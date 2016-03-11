@@ -5,7 +5,9 @@ import lombok.Setter;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.users.UserManager;
 import net.karolek.neoguilds.api.users.data.DataFactory;
+import net.karolek.neoguilds.api.users.data.extension.StatsData;
 import net.karolek.neoguilds.impl.users.UserManagerImpl;
+import net.karolek.neoguilds.impl.users.data.StatsDataImpl;
 import net.karolek.neoguilds.listeners.PlayerJoinListener;
 import net.karolek.store.Store;
 import org.bukkit.Bukkit;
@@ -24,8 +26,9 @@ public class NeoGuilds extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        dataFactory = new DataFactory();
         NeoAPI.setNeoGuilds(this);
+        dataFactory = new DataFactory();
+        NeoAPI.getDataFactory().register(StatsData.class, StatsDataImpl.class);
     }
 
     @Override
