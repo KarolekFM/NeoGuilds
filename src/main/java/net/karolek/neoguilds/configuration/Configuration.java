@@ -75,8 +75,7 @@ public class Configuration {
                 if ((Modifier.isStatic(field.getModifiers())) && (Modifier.isPublic(field.getModifiers()))) {
                     String path = prefix + field.getName().toLowerCase().replace("$", "-").replace("_", ".");
                     if (f.isSet(path)) {
-
-                        if (field.getType().getSuperclass().equals(ConfigField.class)) {
+                        if (ConfigField.class.equals(field.getType().getSuperclass())) {
                             field.set(null, field.getType().getConstructors()[0].newInstance(f.get(path)));
                         } else {
                             field.set(null, f.get(path));
@@ -100,12 +99,22 @@ public class Configuration {
                 if ((Modifier.isStatic(field.getModifiers())) && (Modifier.isPublic(field.getModifiers()))) {
                     if (field.isAnnotationPresent(Ignore.class)) continue;
                     String path = prefix + field.getName().toLowerCase().replace("$", "-").replace("_", ".");
-                    if (field.isAnnotationPresent(Comment.class)) {
-                        Comment comment = field.getAnnotation(Comment.class);
-                        f.set(path, field.get(null).toString(), comment.value());
+                    if (ConfigField.class.equals(field.getType().getSuperclass())) {
+                        if (field.isAnnotationPresent(Comment.class)) {
+                            Comment comment = field.getAnnotation(Comment.class);
+                            f.set(path, field.get(null).toString(), comment.value());
+                        } else {
+                            f.set(path, field.get(null).toString());
+                        }
                     } else {
-                        f.set(path, field.get(null).toString());
+                        if (field.isAnnotationPresent(Comment.class)) {
+                            Comment comment = field.getAnnotation(Comment.class);
+                            f.set(path, field.get(null), comment.value());
+                        } else {
+                            f.set(path, field.get(null));
+                        }
                     }
+
                 }
             }
             getFileConfiguration().save(getConfigFile());

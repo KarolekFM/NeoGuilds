@@ -1,0 +1,5 @@
+name: NeoGuilds
+version: ${project.version}
+main: net.karolek.neoguilds.NeoGuilds
+author: Karolek
+description: Plugin which adds guilds on your own server.

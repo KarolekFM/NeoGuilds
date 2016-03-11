@@ -2,10 +2,10 @@ package net.karolek.neoguilds.commands;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.karolek.pluginapi.commands.exceptions.CommandException;
-import net.karolek.pluginapi.commands.exceptions.PermissionException;
-import net.karolek.pluginapi.utils.Reflection;
-import net.karolek.pluginapi.utils.Util;
+import net.karolek.neoguilds.commands.exceptions.CommandException;
+import net.karolek.neoguilds.commands.exceptions.PermissionException;
+import net.karolek.neoguilds.utils.Reflection;
+import net.karolek.neoguilds.utils.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandMap;

@@ -3,6 +3,7 @@ package net.karolek.neoguilds.api;
 import net.karolek.neoguilds.NeoConfig;
 import net.karolek.neoguilds.NeoGuilds;
 import net.karolek.neoguilds.NeoLang;
+import net.karolek.neoguilds.api.users.UserManager;
 import net.karolek.neoguilds.api.users.data.DataFactory;
 import net.karolek.store.Store;
 
@@ -38,6 +39,10 @@ public final class NeoAPI {
 
     public static DataFactory getDataFactory() {
         return getNeoGuilds().getDataFactory();
+    }
+
+    public static UserManager getUserManager() {
+        return getNeoGuilds().getUserManager();
     }
 
 }
