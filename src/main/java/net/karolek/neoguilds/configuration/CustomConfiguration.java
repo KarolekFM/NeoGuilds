@@ -55,7 +55,7 @@ public final class CustomConfiguration extends YamlConfiguration {
 
             String spaces = "";
 
-            for (int i = 0; i < index; i++) {
+            for (int i = 0; i <= index; i++) {
                 spaces += " ";
             }
 
