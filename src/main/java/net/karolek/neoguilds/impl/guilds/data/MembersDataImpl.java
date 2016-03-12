@@ -2,15 +2,22 @@ package net.karolek.neoguilds.impl.guilds.data;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.data.AbstractData;
 import net.karolek.neoguilds.api.guilds.Guild;
 import net.karolek.neoguilds.api.guilds.MemberType;
 import net.karolek.neoguilds.api.guilds.data.MembersData;
 import net.karolek.neoguilds.api.users.User;
+import net.karolek.neoguilds.utils.Debug;
+import net.karolek.store.Queries;
+import net.karolek.store.common.QueryCallback;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 @Getter
@@ -105,41 +112,119 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
 
     @Override
     public boolean addMember(UUID uuid) {
-        return false;
+        if (!hasInvite(uuid))
+            return false;
+
+        if (isMember(uuid))
+            return false;
+
+        removeInvite(uuid);
+        User user = NeoAPI.getUserManager().getUser(uuid);
+        members.put(user, MemberType.MEMBER);
+        toAdd.add(user);
+        return true;
     }
 
     @Override
     public boolean removeMember(UUID uuid) {
-        return false;
+        if (!isMember(uuid))
+            return false;
+
+        User user = NeoAPI.getUserManager().getUser(uuid);
+        members.remove(user);
+        toDelete.add(user);
+        return true;
     }
 
     @Override
     public boolean addLeader(UUID uuid) {
-        return false;
+        if (!isMember(uuid))
+            return false;
+
+        if (isOwner(uuid))
+            return false;
+
+        User user = NeoAPI.getUserManager().getUser(uuid);
+        members.put(user, MemberType.LEADER);
+        toUpdate.add(user);
+        return true;
     }
 
     @Override
     public boolean removeLeader(UUID uuid) {
-        return false;
+        if (!isMember(uuid))
+            return false;
+
+        User user = NeoAPI.getUserManager().getUser(uuid);
+        members.put(user, MemberType.MEMBER);
+        toUpdate.add(user);
+        return true;
     }
 
     @Override
     public boolean addOwner(UUID uuid) {
-        return false;
+        if (!isMember(uuid))
+            return false;
+
+        if (isLeader(uuid))
+            return false;
+
+        User user = NeoAPI.getUserManager().getUser(uuid);
+        members.put(user, MemberType.OWNER);
+        toUpdate.add(user);
+        return true;
     }
 
     @Override
     public boolean removeOwner(UUID uuid) {
-        return false;
+        if (!isMember(uuid))
+            return false;
+
+        User user = NeoAPI.getUserManager().getUser(uuid);
+        members.put(user, MemberType.MEMBER);
+        toUpdate.add(user);
+        return true;
+    }
+
+    private MemberType getMemberType(User user) {
+        return members.get(user);
     }
 
     @Override
     public void loadData() {
+        Queries.customQuery().query("SELECT * FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_members` WHERE `guildUuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
+            @Override
+            public void done(ResultSet resultSet) throws SQLException {
+                while (resultSet.next()) {
+                    User user = NeoAPI.getUserManager().getUser(resultSet.getString("userUuid"));
+                    members.put(user, MemberType.valueOf(resultSet.getString("memberType")));
+                    Debug.debug("Loaded guild (" + getT().getTag() + ") member: " + user.getName() + ", type: " + resultSet.getString("memberType"));
+                }
+            }
 
+            @Override
+            public void error(Throwable throwable) {
+
+            }
+        }).execute(NeoAPI.getStore());
     }
 
     @Override
     public void saveData() {
-
+        for (User user : toAdd) {
+            Queries.customQuery().query(
+                    "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "guilds_members`(`id`, `guildUuid`, `userUuid`, `memberType`) VALUES (NULL,'" + getT().getUUID() + "','" + user.getUUID() + "','" + getMemberType(user) + "')"
+            ).execute(NeoAPI.getStore());
+        }
+        for (User user : toUpdate) {
+            Queries.customQuery().query(
+                    "UPDATE `neoguilds_guilds_members` SET `guildUuid`='" + getT().getUUID() + "',`memberType`='" + getMemberType(user) + "' WHERE `userUuid`='" + user.getUUID() + "'"
+            ).execute(NeoAPI.getStore());
+        }
+        for (User user : toDelete) {
+            Queries.customQuery().query(
+                    "DELETE FROM `neoguilds_guilds_members` WHERE `userUuid`='" + user.getUUID() + "'"
+            ).execute(NeoAPI.getStore());
+        }
     }
 }
