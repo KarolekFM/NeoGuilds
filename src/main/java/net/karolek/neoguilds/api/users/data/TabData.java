@@ -1,9 +1,10 @@
-package net.karolek.neoguilds.api.users.data.extension;
+package net.karolek.neoguilds.api.users.data;
 
-import net.karolek.neoguilds.api.users.data.UserData;
+import net.karolek.neoguilds.api.data.Data;
+import net.karolek.neoguilds.api.users.User;
 import org.bukkit.entity.Player;
 
-public interface TabData extends UserData {
+public interface TabData extends Data<User> {
 
     Player getPlayer();
 

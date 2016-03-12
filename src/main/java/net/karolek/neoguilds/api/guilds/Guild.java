@@ -1,4 +1,18 @@
 package net.karolek.neoguilds.api.guilds;
 
-public interface Guild {
+import net.karolek.neoguilds.api.data.DataExtension;
+import net.karolek.neoguilds.api.users.User;
+
+import java.util.UUID;
+
+public interface Guild extends DataExtension {
+
+    UUID getUUID();
+
+    String getTag();
+
+    String getName();
+
+    User getCreator();
+
 }

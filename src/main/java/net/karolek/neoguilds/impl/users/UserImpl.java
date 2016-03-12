@@ -2,9 +2,9 @@ package net.karolek.neoguilds.impl.users;
 
 import lombok.Getter;
 import net.karolek.neoguilds.api.NeoAPI;
+import net.karolek.neoguilds.api.data.AbstractData;
+import net.karolek.neoguilds.api.data.Data;
 import net.karolek.neoguilds.api.users.User;
-import net.karolek.neoguilds.api.users.data.UserData;
-import net.karolek.neoguilds.impl.users.data.UserDataImpl;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -18,7 +18,8 @@ public class UserImpl implements User {
 
     private final UUID uuid;
     private final String name;
-    private final Map<Class<? extends UserData>, UserData> userData = new HashMap<>();
+    private final Map<Class<? extends Data<User>>, AbstractData<User>> data = new HashMap<>();
+    //private final Map<Class<? extends UserData>, UserData> userData = new HashMap<>();
 
     public UserImpl(UUID uuid, String name) {
         this.uuid = uuid;
@@ -41,21 +42,21 @@ public class UserImpl implements User {
     }
 
     @Override
-    public <T extends UserData> void setData(Class<T> clazz, T t) {
-        this.userData.put(clazz, t);
+    public void setData(Class<? extends Data<User>> clazz, AbstractData<User> data) {
+        this.data.put(clazz, data);
     }
 
     @Override
-    public <T extends UserData> T getData(Class<T> clazz) {
-        if (userData.get(clazz) == null) {
-            Class<? extends UserDataImpl> c = NeoAPI.getDataFactory().getFactory(clazz);
+    public <U extends Data<User>> U getData(Class<U> clazz) {
+        if (data.get(clazz) == null) {
             try {
-                UserData data = c.getConstructor(User.class).newInstance(this);
-                setData(clazz, (T) data);
+                Class<? extends AbstractData> c = NeoAPI.getDataFactory().getFactory(clazz);
+                AbstractData<User> data = c.getConstructor(User.class).newInstance(this);
+                setData(clazz, data);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return (T) userData.get(clazz);
+        return (U) data.get(clazz);
     }
 }

@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.Profile;
+import net.karolek.neoguilds.api.data.AbstractData;
 import net.karolek.neoguilds.api.packets.PlayerInfoAction;
 import net.karolek.neoguilds.api.users.User;
-import net.karolek.neoguilds.api.users.data.extension.TabData;
+import net.karolek.neoguilds.api.users.data.TabData;
 import net.karolek.neoguilds.utils.Util;
 import org.bukkit.entity.Player;
 
@@ -14,10 +15,10 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class TabDataImpl extends UserDataImpl implements TabData {
+public class TabDataImpl extends AbstractData<User> implements TabData {
 
-    private static final int ROWS = 20;
-    private static final int COLUMNS = 4;
+    public static final int ROWS = 20;
+    public static final int COLUMNS = 4;
     private static final Profile[][] PROFILES = new Profile[ROWS][COLUMNS];
 
     static {
@@ -40,6 +41,7 @@ public class TabDataImpl extends UserDataImpl implements TabData {
         super(user);
         for (int col = 0; col < COLUMNS; col++) {
             for (int row = 0; row < ROWS; row++) {
+
                 this.slots[row][col] = "";
             }
         }

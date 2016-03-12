@@ -28,6 +28,24 @@ public class NeoConfig extends Configuration {
     @Comment(value = "startowa ilosc punktow rankingu gracza")
     public static int RANKING_START$POINTS = 1000;
 
+    @Comment(value = "swiat na ktorym mozna zakladac gildie")
+    public static String CUBOID_WORLD = "world";
+
+    @Comment(value = "poziom na ktorym znajduje sie krysztal")
+    public static int CUBOID_CRYSTAL$LEVEL = 50;
+
+    @Comment(value = "startowy rozmiar gildii (promien!)")
+    public static int CUBOID_SIZE_START = 24;
+
+    @Comment(value = "maksymalny rozmiar gildii (promien!)")
+    public static int CUBOID_SIZE_MAX = 74;
+
+    @Comment(value = "ilosc ktora jest dodawana do promieniu gildii po jej powiekszeniu")
+    public static int CUBOID_SIZE_ADD = 1;
+
+    @Comment(value = "odlegosc pomiedzy gildiami maksymalnie powiekszonymi")
+    public static int CUBOID_SIZE_BETWEEN = 50;
+
     public NeoConfig(JavaPlugin plugin) {
         super(plugin, "config.yml", "config.");
     }
