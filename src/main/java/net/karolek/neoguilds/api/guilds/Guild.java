@@ -5,7 +5,7 @@ import net.karolek.neoguilds.api.users.User;
 
 import java.util.UUID;
 
-public interface Guild extends DataExtension {
+public interface Guild extends DataExtension<Guild> {
 
     UUID getUUID();
 

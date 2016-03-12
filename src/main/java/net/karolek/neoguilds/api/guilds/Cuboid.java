@@ -1,13 +1,11 @@
-package net.karolek.neoguilds.api.guilds.data;
+package net.karolek.neoguilds.api.guilds;
 
-import net.karolek.neoguilds.api.data.Data;
-import net.karolek.neoguilds.api.guilds.Guild;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public interface CuboidData extends Data<Guild> {
+public interface Cuboid {
 
     World getWorld();
 
