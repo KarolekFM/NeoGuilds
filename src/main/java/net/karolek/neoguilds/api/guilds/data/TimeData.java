@@ -9,6 +9,6 @@ public interface TimeData extends Data<Guild> {
 
     long getLastExplodeTime();
 
-    void setExplodeTime();
+    void setExplodeTime(long time);
 
 }
