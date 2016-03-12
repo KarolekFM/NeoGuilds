@@ -3,11 +3,17 @@ package net.karolek.neoguilds;
 import lombok.Getter;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.data.DataFactory;
+import net.karolek.neoguilds.api.guilds.GuildManager;
+import net.karolek.neoguilds.api.guilds.data.CuboidData;
+import net.karolek.neoguilds.api.guilds.data.MembersData;
 import net.karolek.neoguilds.api.packets.PacketManager;
 import net.karolek.neoguilds.api.users.UserManager;
 import net.karolek.neoguilds.api.users.data.StatsData;
 import net.karolek.neoguilds.api.users.data.TabData;
 import net.karolek.neoguilds.configuration.fields.TabSlot;
+import net.karolek.neoguilds.impl.guilds.GuildManagerImpl;
+import net.karolek.neoguilds.impl.guilds.data.CuboidDataImpl;
+import net.karolek.neoguilds.impl.guilds.data.MembersDataImpl;
 import net.karolek.neoguilds.impl.packets.PacketManagerImpl;
 import net.karolek.neoguilds.impl.users.UserManagerImpl;
 import net.karolek.neoguilds.impl.users.data.StatsDataImpl;
@@ -29,6 +35,7 @@ public class NeoGuilds extends JavaPlugin {
     private Store store;
     private UserManager userManager;
     private PacketManager packetManager;
+    private GuildManager guildManager;
 
     @Override
     public void onLoad() {
@@ -37,6 +44,8 @@ public class NeoGuilds extends JavaPlugin {
         dataFactory = new DataFactory();
         NeoAPI.getDataFactory().register(StatsData.class, StatsDataImpl.class);
         NeoAPI.getDataFactory().register(TabData.class, TabDataImpl.class);
+        NeoAPI.getDataFactory().register(MembersData.class, MembersDataImpl.class);
+        NeoAPI.getDataFactory().register(CuboidData.class, CuboidDataImpl.class);
     }
 
     @Override
@@ -48,6 +57,7 @@ public class NeoGuilds extends JavaPlugin {
         store.setDebug(NeoConfig.DEBUG);
         userManager = new UserManagerImpl(this);
         packetManager = new PacketManagerImpl();
+        guildManager = new GuildManagerImpl(this);
 
 
         PluginManager pm = Bukkit.getPluginManager();

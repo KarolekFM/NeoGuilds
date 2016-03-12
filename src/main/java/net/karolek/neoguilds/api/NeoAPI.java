@@ -4,6 +4,7 @@ import net.karolek.neoguilds.NeoConfig;
 import net.karolek.neoguilds.NeoGuilds;
 import net.karolek.neoguilds.NeoLang;
 import net.karolek.neoguilds.api.data.DataFactory;
+import net.karolek.neoguilds.api.guilds.GuildManager;
 import net.karolek.neoguilds.api.packets.PacketManager;
 import net.karolek.neoguilds.api.users.UserManager;
 import net.karolek.store.Store;
@@ -48,6 +49,10 @@ public final class NeoAPI {
 
     public static PacketManager getPacketManager() {
         return getNeoGuilds().getPacketManager();
+    }
+
+    public static GuildManager getGuildManager() {
+        return getNeoGuilds().getGuildManager();
     }
 
 }

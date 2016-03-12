@@ -63,7 +63,7 @@ public final class UserManagerImpl implements UserManager {
     public User createUser(Player player) {
         User user = new UserImpl(player);
         Queries.customQuery().query(
-                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "users`(`id`, `uuid`, `name`, `displayName`) VALUES (NULL,'" + user.getUUID() + "','" + user.getName() + "')"
+                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "users`(`id`, `uuid`, `name`) VALUES (NULL,'" + user.getUUID() + "','" + user.getName() + "')"
         ).execute(NeoAPI.getStore());
         users.put(user.getUUID(), user);
         return user;

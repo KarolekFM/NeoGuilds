@@ -5,11 +5,12 @@ import lombok.Setter;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.data.AbstractData;
 import net.karolek.neoguilds.api.data.Data;
-import net.karolek.neoguilds.api.guilds.Cuboid;
 import net.karolek.neoguilds.api.guilds.Guild;
 import net.karolek.neoguilds.api.users.User;
 import org.bukkit.entity.Player;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -22,7 +23,6 @@ public class GuildImpl implements Guild {
     private final User creator;
     private final String tag;
     private final String name;
-    private final Cuboid cuboid;
     private final Map<Class<? extends Data<Guild>>, AbstractData<Guild>> data = new HashMap<>();
 
 
@@ -31,7 +31,13 @@ public class GuildImpl implements Guild {
         this.creator = NeoAPI.getUserManager().getUser(player);
         this.tag = tag;
         this.name = name;
-        this.cuboid = new CuboidImpl(player.getLocation());
+    }
+
+    public GuildImpl(ResultSet rs) throws SQLException {
+        this.uuid = UUID.fromString(rs.getString("uuid"));
+        this.creator = NeoAPI.getUserManager().getUser(rs.getString("creator"));
+        this.tag = rs.getString("tag");
+        this.name = rs.getString("name");
     }
 
     @Override

@@ -197,8 +197,9 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
             public void done(ResultSet resultSet) throws SQLException {
                 while (resultSet.next()) {
                     User user = NeoAPI.getUserManager().getUser(resultSet.getString("userUuid"));
-                    members.put(user, MemberType.valueOf(resultSet.getString("memberType")));
-                    Debug.debug("Loaded guild (" + getT().getTag() + ") member: " + user.getName() + ", type: " + resultSet.getString("memberType"));
+                    MemberType memberType = MemberType.valueOf(resultSet.getString("memberType"));
+                    members.put(user, memberType);
+                    Debug.debug("Loaded guild (" + getT().getTag() + ") member: " + user.getName() + ", type: " + memberType.name());
                 }
             }
 

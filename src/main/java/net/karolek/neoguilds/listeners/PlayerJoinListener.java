@@ -32,6 +32,9 @@ public class PlayerJoinListener implements Listener {
 
         tab.sendTab();
 
+
+        //NeoAPI.getGuildManager().createGuild("TEST", "TestowaGildia", p);
+
     }
 
 }
