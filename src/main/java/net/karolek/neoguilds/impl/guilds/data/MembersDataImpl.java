@@ -219,12 +219,12 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
         }
         for (User user : toUpdate) {
             Queries.customQuery().query(
-                    "UPDATE `neoguilds_guilds_members` SET `guildUuid`='" + getT().getUUID() + "',`memberType`='" + getMemberType(user) + "' WHERE `userUuid`='" + user.getUUID() + "'"
+                    "UPDATE `" + NeoConfig.MYSQL_PREFIX + "guilds_members` SET `guildUuid`='" + getT().getUUID() + "',`memberType`='" + getMemberType(user) + "' WHERE `userUuid`='" + user.getUUID() + "'"
             ).execute(NeoAPI.getStore());
         }
         for (User user : toDelete) {
             Queries.customQuery().query(
-                    "DELETE FROM `neoguilds_guilds_members` WHERE `userUuid`='" + user.getUUID() + "'"
+                    "DELETE FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_members` WHERE `userUuid`='" + user.getUUID() + "'"
             ).execute(NeoAPI.getStore());
         }
     }
