@@ -1,6 +1,6 @@
 package net.karolek.neoguilds.impl.users;
 
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.users.User;
 import net.karolek.neoguilds.api.users.UserManager;
@@ -25,7 +25,7 @@ public final class UserManagerImpl implements UserManager {
 
     public UserManagerImpl(JavaPlugin plugin) {
         this.plugin = plugin;
-        Queries.customQuery().query("SELECT * FROM `" + NeoConfig.MYSQL_PREFIX + "users`").callback(new QueryCallback() {
+        Queries.customQuery().query("SELECT * FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "users`").callback(new QueryCallback() {
             @Override
             public void done(ResultSet resultSet) throws SQLException {
                 while (resultSet.next()) {
@@ -63,7 +63,7 @@ public final class UserManagerImpl implements UserManager {
     public User createUser(Player player) {
         User user = new UserImpl(player);
         Queries.customQuery().query(
-                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "users`(`id`, `uuid`, `name`) VALUES (NULL,'" + user.getUUID() + "','" + user.getName() + "')"
+                "INSERT INTO `" + Config.STORE_MYSQL_TABLE$PREFIX + "users`(`id`, `uuid`, `name`) VALUES (NULL,'" + user.getUUID() + "','" + user.getName() + "')"
         ).execute(NeoAPI.getStore());
         users.put(user.getUUID(), user);
         return user;

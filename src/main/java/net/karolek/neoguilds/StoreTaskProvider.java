@@ -15,7 +15,7 @@ public class StoreTaskProvider implements TaskProvider {
 
     public StoreTaskProvider(JavaPlugin plugin) {
         this.plugin = plugin;
-        this.executorService = Executors.newSingleThreadExecutor();
+        this.executorService = Executors.newCachedThreadPool();
     }
 
     @Override

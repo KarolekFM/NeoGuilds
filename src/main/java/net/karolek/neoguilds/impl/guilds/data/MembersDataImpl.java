@@ -2,7 +2,7 @@ package net.karolek.neoguilds.impl.guilds.data;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.data.AbstractData;
 import net.karolek.neoguilds.api.guilds.Guild;
@@ -77,19 +77,28 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
 
     @Override
     public boolean isMember(UUID uuid) {
-        for (User user : members.keySet()) if (user.getUUID().equals(uuid)) return true;
+        for (User user : members.keySet()) {
+            System.out.println(user);
+            System.out.println(user.getUUID());
+            if (user.getUUID().equals(uuid))
+                return true;
+        }
         return false;
     }
 
     @Override
     public boolean isLeader(UUID uuid) {
-        for (User user : getLeaders()) if (user.getUUID().equals(uuid)) return true;
+        for (User user : getLeaders())
+            if (user.getUUID().equals(uuid))
+                return true;
         return false;
     }
 
     @Override
     public boolean isOwner(UUID uuid) {
-        for (User user : getOwners()) if (user.getUUID().equals(uuid)) return true;
+        for (User user : getOwners())
+            if (user.getUUID().equals(uuid))
+                return true;
         return false;
     }
 
@@ -192,11 +201,11 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
 
     @Override
     public void loadData() {
-        Queries.customQuery().query("SELECT * FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_members` WHERE `guildUuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
+        Queries.customQuery().query("SELECT * FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_members` WHERE `guildUuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
             @Override
             public void done(ResultSet resultSet) throws SQLException {
                 while (resultSet.next()) {
-                    User user = NeoAPI.getUserManager().getUser(resultSet.getString("userUuid"));
+                    User user = NeoAPI.getUserManager().getUser(UUID.fromString(resultSet.getString("userUuid")));
                     MemberType memberType = MemberType.valueOf(resultSet.getString("memberType"));
                     members.put(user, memberType);
                     Debug.debug("Loaded guild (" + getT().getTag() + ") member: " + user.getName() + ", type: " + memberType.name());
@@ -205,7 +214,7 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
 
             @Override
             public void error(Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         }).execute(NeoAPI.getStore());
     }
@@ -214,17 +223,17 @@ public class MembersDataImpl extends AbstractData<Guild> implements MembersData 
     public void saveData() {
         for (User user : toAdd) {
             Queries.customQuery().query(
-                    "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "guilds_members`(`id`, `guildUuid`, `userUuid`, `memberType`) VALUES (NULL,'" + getT().getUUID() + "','" + user.getUUID() + "','" + getMemberType(user) + "')"
+                    "INSERT INTO `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_members`(`id`, `guildUuid`, `userUuid`, `memberType`) VALUES (NULL,'" + getT().getUUID() + "','" + user.getUUID() + "','" + getMemberType(user) + "')"
             ).execute(NeoAPI.getStore());
         }
         for (User user : toUpdate) {
             Queries.customQuery().query(
-                    "UPDATE `" + NeoConfig.MYSQL_PREFIX + "guilds_members` SET `guildUuid`='" + getT().getUUID() + "',`memberType`='" + getMemberType(user) + "' WHERE `userUuid`='" + user.getUUID() + "'"
+                    "UPDATE `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_members` SET `guildUuid`='" + getT().getUUID() + "',`memberType`='" + getMemberType(user) + "' WHERE `userUuid`='" + user.getUUID() + "'"
             ).execute(NeoAPI.getStore());
         }
         for (User user : toDelete) {
             Queries.customQuery().query(
-                    "DELETE FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_members` WHERE `userUuid`='" + user.getUUID() + "'"
+                    "DELETE FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_members` WHERE `userUuid`='" + user.getUUID() + "'"
             ).execute(NeoAPI.getStore());
         }
     }

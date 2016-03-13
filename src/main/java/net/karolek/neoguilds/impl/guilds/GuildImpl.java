@@ -9,6 +9,7 @@ import net.karolek.neoguilds.api.guilds.Guild;
 import net.karolek.neoguilds.api.users.User;
 import org.bukkit.entity.Player;
 
+import java.nio.charset.Charset;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class GuildImpl implements Guild {
 
 
     public GuildImpl(String tag, String name, Player player) {
-        this.uuid = UUID.randomUUID();
+        this.uuid = UUID.nameUUIDFromBytes(("Guild:" + name).getBytes(Charset.forName("UTF-8")));
         this.creator = NeoAPI.getUserManager().getUser(player);
         this.tag = tag;
         this.name = name;

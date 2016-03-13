@@ -5,4 +5,7 @@ public abstract class ConfigField<T> {
     public ConfigField(T t) {
     }
 
+    public ConfigField() {
+    }
+
 }

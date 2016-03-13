@@ -10,7 +10,7 @@ import net.karolek.neoguilds.api.packets.PacketManager;
 import net.karolek.neoguilds.api.users.UserManager;
 import net.karolek.neoguilds.api.users.data.StatsData;
 import net.karolek.neoguilds.api.users.data.TabData;
-import net.karolek.neoguilds.configuration.fields.TabSlot;
+import net.karolek.neoguilds.commands.guilds.GuildCommand;
 import net.karolek.neoguilds.impl.guilds.GuildManagerImpl;
 import net.karolek.neoguilds.impl.guilds.data.CuboidDataImpl;
 import net.karolek.neoguilds.impl.guilds.data.MembersDataImpl;
@@ -21,7 +21,6 @@ import net.karolek.neoguilds.impl.users.data.TabDataImpl;
 import net.karolek.neoguilds.listeners.PlayerJoinListener;
 import net.karolek.store.Store;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -29,9 +28,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class NeoGuilds extends JavaPlugin {
 
     private DataFactory dataFactory;
-    private NeoConfig neoConfig;
-    private NeoLang neoLang;
-    private NeoTab neoTab;
+    private Config neoConfig;
+    private Messages messages;
     private Store store;
     private UserManager userManager;
     private PacketManager packetManager;
@@ -39,7 +37,6 @@ public class NeoGuilds extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        ConfigurationSerialization.registerClass(TabSlot.class, "TabSlot");
         NeoAPI.setNeoGuilds(this);
         dataFactory = new DataFactory();
         NeoAPI.getDataFactory().register(StatsData.class, StatsDataImpl.class);
@@ -50,11 +47,10 @@ public class NeoGuilds extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        neoConfig = new NeoConfig(this);
-        neoLang = new NeoLang(this);
-        neoTab = new NeoTab(this);
-        store = Store.createMysql(new StoreTaskProvider(this), NeoConfig.MYSQL_HOST, NeoConfig.MYSQL_BASE, NeoConfig.MYSQL_USER, NeoConfig.MYSQL_PASS);
-        store.setDebug(NeoConfig.DEBUG);
+        neoConfig = new Config(this);
+        messages = new Messages(this, Config.LANG);
+        store = Store.createMysql(new StoreTaskProvider(this), Config.STORE_MYSQL_HOST, Config.STORE_MYSQL_BASENAME, Config.STORE_MYSQL_USERNAME, Config.STORE_MYSQL_PASSWORD);
+        store.setDebug(Config.DEBUG);
         userManager = new UserManagerImpl(this);
         packetManager = new PacketManagerImpl();
         guildManager = new GuildManagerImpl(this);
@@ -64,16 +60,12 @@ public class NeoGuilds extends JavaPlugin {
 
         pm.registerEvents(new PlayerJoinListener(), this);
 
-
+        new GuildCommand().register();
 
     }
 
     @Override
     public void onDisable() {
 
-        userManager = null;
-        store.disconnect();
-        neoLang = null;
-        neoConfig = null;
     }
 }

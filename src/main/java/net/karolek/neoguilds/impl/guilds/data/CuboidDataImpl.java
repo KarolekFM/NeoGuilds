@@ -2,7 +2,7 @@ package net.karolek.neoguilds.impl.guilds.data;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.data.AbstractData;
 import net.karolek.neoguilds.api.guilds.Guild;
@@ -34,14 +34,14 @@ public class CuboidDataImpl extends AbstractData<Guild> implements CuboidData {
 
     @Override
     public Location getCenter() {
-        return new Location(world, centerX, NeoConfig.CUBOID_CRYSTAL$LEVEL, centerZ);
+        return new Location(world, centerX, Config.CUBOID_CRYSTAL$LEVEL, centerZ);
     }
 
     @Override
     public boolean addSize() {
-        if (this.size >= NeoConfig.CUBOID_SIZE_MAX)
+        if (this.size >= Config.CUBOID_SIZE_MAX)
             return false;
-        this.size += NeoConfig.CUBOID_SIZE_ADD;
+        this.size += Config.CUBOID_SIZE_ADD;
         return true;
     }
 
@@ -66,7 +66,7 @@ public class CuboidDataImpl extends AbstractData<Guild> implements CuboidData {
 
     @Override
     public void loadData() {
-        Queries.customQuery().query("SELECT * FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_cuboids` WHERE `guildUuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
+        Queries.customQuery().query("SELECT * FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_cuboids` WHERE `guildUuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
             @Override
             public void done(ResultSet resultSet) throws SQLException {
                 setWorld(Bukkit.getWorld(resultSet.getString("cuboidWorld")));
@@ -86,7 +86,7 @@ public class CuboidDataImpl extends AbstractData<Guild> implements CuboidData {
     @Override
     public void saveData() {
         Queries.customQuery().query(
-                "UPDATE `" + NeoConfig.MYSQL_PREFIX + "guilds_cuboids` SET `cuboidWorld`='" + getWorld().getName() + "',`cuboidX`=" + getCenterX() + ",`cuboidZ`=" + getCenterZ() + ",`cuboidSize`=" + getSize() + ",`homeWorld`='" + getHome().getWorld().getName() + "',`homeX`=" + getHome().getBlockX() + ",`homeY`=" + getHome().getBlockY() + ",`homeZ`=" + getHome().getBlockZ() + " WHERE `guildUuid`='" + getT().getUUID() + "'"
+                "UPDATE `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_cuboids` SET `cuboidWorld`='" + getWorld().getName() + "',`cuboidX`=" + getCenterX() + ",`cuboidZ`=" + getCenterZ() + ",`cuboidSize`=" + getSize() + ",`homeWorld`='" + getHome().getWorld().getName() + "',`homeX`=" + getHome().getBlockX() + ",`homeY`=" + getHome().getBlockY() + ",`homeZ`=" + getHome().getBlockZ() + " WHERE `guildUuid`='" + getT().getUUID() + "'"
         ).execute(NeoAPI.getStore());
     }
 }

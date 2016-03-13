@@ -1,6 +1,6 @@
 package net.karolek.neoguilds.impl.guilds;
 
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.guilds.Guild;
 import net.karolek.neoguilds.api.guilds.GuildManager;
@@ -28,13 +28,14 @@ public class GuildManagerImpl implements GuildManager {
     public GuildManagerImpl(JavaPlugin plugin) {
         this.plugin = plugin;
 
-        Queries.customQuery().query("SELECT * FROM `" + NeoConfig.MYSQL_PREFIX + "guilds`").callback(new QueryCallback() {
+        Queries.customQuery().query("SELECT * FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds`").callback(new QueryCallback() {
             @Override
             public void done(ResultSet resultSet) throws SQLException {
                 while (resultSet.next()) {
                     Guild g = new GuildImpl(resultSet);
                     Debug.debug("Loaded guild: " + g.getTag() + ", " + g.getName() + ",  " + g.getUUID());
                     guilds.add(g);
+
                 }
             }
 
@@ -54,27 +55,25 @@ public class GuildManagerImpl implements GuildManager {
         Location l = player.getLocation();
 
         Queries.customQuery().query(
-                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "guilds`(`id`, `uuid`, `tag`, `name`, `creator`) VALUES (NULL,'" + guild.getUUID() + "','" + guild.getTag() + "','" + guild.getName() + "','" + player.getUniqueId() + "')"
+                "INSERT INTO `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds`(`id`, `uuid`, `tag`, `name`, `creator`) VALUES (NULL,'" + guild.getUUID() + "','" + guild.getTag() + "','" + guild.getName() + "','" + player.getUniqueId() + "')"
         ).execute(NeoAPI.getStore());
         Queries.customQuery().query(
-                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "guilds_members`(`id`, `guildUuid`, `userUuid`, `memberType`) VALUES (NULL,'" + guild.getUUID() + "','" + player.getUniqueId() + "','OWNER')"
+                "INSERT INTO `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_members`(`id`, `guildUuid`, `userUuid`, `memberType`) VALUES (NULL,'" + guild.getUUID() + "','" + player.getUniqueId() + "','OWNER')"
         ).execute(NeoAPI.getStore());
         Queries.customQuery().query(
-                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "guilds_cuboids`(`id`, `guildUuid`, `cuboidWorld`, `cuboidX`, `cuboidZ`, `cuboidSize`, `homeWorld`, `homeX`, `homeY`, `homeZ`) VALUES (NULL,'" + guild.getUUID() + "','" + l.getWorld().getName() + "'," + l.getBlockX() + "," + l.getBlockZ() + "," + NeoConfig.CUBOID_SIZE_START + ",'" + l.getWorld().getName() + "'," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + ")"
+                "INSERT INTO `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_cuboids`(`id`, `guildUuid`, `cuboidWorld`, `cuboidX`, `cuboidZ`, `cuboidSize`, `homeWorld`, `homeX`, `homeY`, `homeZ`) VALUES (NULL,'" + guild.getUUID() + "','" + l.getWorld().getName() + "'," + l.getBlockX() + "," + l.getBlockZ() + "," + Config.CUBOID_SIZE_START + ",'" + l.getWorld().getName() + "'," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + ")"
         ).execute(NeoAPI.getStore());
-
         guild.getData(MembersData.class);
         guild.getData(CuboidData.class);
-
         return guild;
     }
 
     @Override
     public boolean deleteGuild(Guild guild) {
         guilds.remove(guild);
-        Queries.customQuery().query("DELETE FROM `" + NeoConfig.MYSQL_PREFIX + "guilds` WHERE `uuid`='" + guild.getUUID() + "'").execute(NeoAPI.getStore());
-        Queries.customQuery().query("DELETE FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_members` WHERE `guildUuid`='" + guild.getUUID() + "'").execute(NeoAPI.getStore());
-        Queries.customQuery().query("DELETE FROM `" + NeoConfig.MYSQL_PREFIX + "guilds_cuboids` WHERE `guildUuid`='" + guild.getUUID() + "'").execute(NeoAPI.getStore());
+        Queries.customQuery().query("DELETE FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds` WHERE `uuid`='" + guild.getUUID() + "'").execute(NeoAPI.getStore());
+        Queries.customQuery().query("DELETE FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_members` WHERE `guildUuid`='" + guild.getUUID() + "'").execute(NeoAPI.getStore());
+        Queries.customQuery().query("DELETE FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "guilds_cuboids` WHERE `guildUuid`='" + guild.getUUID() + "'").execute(NeoAPI.getStore());
         return false;
     }
 
@@ -108,6 +107,14 @@ public class GuildManagerImpl implements GuildManager {
 
     @Override
     public boolean canCreateGuild(Location location) {
-        return false;
+        if (!location.getWorld().getName().equals(Config.CUBOID_WORLD))
+            return false;
+        int mindistance = Config.CUBOID_SIZE_MAX * 2 + Config.CUBOID_SIZE_BETWEEN;
+        for (Guild g : guilds) {
+            CuboidData data = g.getData(CuboidData.class);
+            if ((Math.abs(data.getCenterX() - location.getBlockX()) <= mindistance) && (Math.abs(data.getCenterZ() - location.getBlockZ()) <= mindistance))
+                return false;
+        }
+        return true;
     }
 }

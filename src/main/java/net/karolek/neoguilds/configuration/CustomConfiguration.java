@@ -34,16 +34,16 @@ public final class CustomConfiguration extends YamlConfiguration {
 
 
     public void set(String path, Object value, String... comments) {
-        for (String comment : comments) {
-            this.set(path + "_COMMENT_" + commentsCounter, comment);
-            commentsCounter++;
-        }
+        //for (String comment : comments) {
+        //    this.set(path + "_COMMENT_" + commentsCounter, comment);
+        //    commentsCounter++;
+        // }
         this.set(path, value);
     }
 
     @Override
     public String saveToString() {
-        String[] lines = super.saveToString().split("\n");
+        /*String[] lines = super.saveToString().split("\n");
 
         StringBuilder config = new StringBuilder("");
 
@@ -71,7 +71,8 @@ public final class CustomConfiguration extends YamlConfiguration {
 
         }
 
-        return config.toString();
+        return config.toString();*/
+        return super.saveToString();
     }
 
 }

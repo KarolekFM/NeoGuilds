@@ -1,8 +1,8 @@
 package net.karolek.neoguilds.api;
 
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
+import net.karolek.neoguilds.Messages;
 import net.karolek.neoguilds.NeoGuilds;
-import net.karolek.neoguilds.NeoLang;
 import net.karolek.neoguilds.api.data.DataFactory;
 import net.karolek.neoguilds.api.guilds.GuildManager;
 import net.karolek.neoguilds.api.packets.PacketManager;
@@ -31,12 +31,12 @@ public final class NeoAPI {
         return getNeoGuilds().getStore();
     }
 
-    public static NeoConfig getNeoConfig() {
+    public static Config getConfig() {
         return getNeoGuilds().getNeoConfig();
     }
 
-    public static NeoLang getNeoLang() {
-        return getNeoGuilds().getNeoLang();
+    public static Messages getMessages() {
+        return getNeoGuilds().getMessages();
     }
 
     public static DataFactory getDataFactory() {

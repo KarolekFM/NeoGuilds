@@ -1,13 +1,14 @@
 package net.karolek.neoguilds.commands.exceptions;
 
 
-import net.karolek.neoguilds.NeoLang;
+import net.karolek.neoguilds.Messages;
 import net.karolek.neoguilds.commands.AbstractCommand;
+import net.karolek.neoguilds.utils.ChatUtil;
 
 public class NoEnoughArgsException extends CommandException {
 
     public NoEnoughArgsException(String message) {
-        super(NeoLang.COMMANDS_NO$ENOGUH$ARGS.getMessage(message));
+        super(ChatUtil.getMessage(Messages.COMMANDS_NO$ENOUGH$ARGS, message));
     }
 
     public NoEnoughArgsException(AbstractCommand executor) {

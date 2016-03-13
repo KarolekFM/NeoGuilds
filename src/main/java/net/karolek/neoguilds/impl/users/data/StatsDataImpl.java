@@ -2,7 +2,7 @@ package net.karolek.neoguilds.impl.users.data;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.api.NeoAPI;
 import net.karolek.neoguilds.api.data.AbstractData;
 import net.karolek.neoguilds.api.users.User;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
 @Setter
 public class StatsDataImpl extends AbstractData<User> implements StatsData {
 
-    private int points = NeoConfig.RANKING_START$POINTS;
+    private int points = Config.RANKING_START$POINTS;
     private int kills = 0;
     private int deaths = 0;
 
@@ -58,7 +58,7 @@ public class StatsDataImpl extends AbstractData<User> implements StatsData {
 
     @Override
     public void loadData() {
-        Queries.customQuery().query("SELECT `points`, `kills`, `deaths` FROM `" + NeoConfig.MYSQL_PREFIX + "stats` WHERE `uuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
+        Queries.customQuery().query("SELECT `points`, `kills`, `deaths` FROM `" + Config.STORE_MYSQL_TABLE$PREFIX + "stats` WHERE `uuid`='" + getT().getUUID() + "'").callback(new QueryCallback() {
             @Override
             public void done(ResultSet resultSet) throws SQLException {
                 if (resultSet != null) {
@@ -77,7 +77,7 @@ public class StatsDataImpl extends AbstractData<User> implements StatsData {
     @Override
     public void saveData() {
         Queries.customQuery().query(
-                "INSERT INTO `" + NeoConfig.MYSQL_PREFIX + "stats`(`id`, `uuid`, `points`, `kills`, `deaths`) VALUES (NULL,'" + getT().getUUID() + "'," + getPoints() + "," + getKills() + "," + getDeaths() + ") " +
+                "INSERT INTO `" + Config.STORE_MYSQL_TABLE$PREFIX + "stats`(`id`, `uuid`, `points`, `kills`, `deaths`) VALUES (NULL,'" + getT().getUUID() + "'," + getPoints() + "," + getKills() + "," + getDeaths() + ") " +
                         "ON DUPLICATE KEY UPDATE `points`=" + getPoints() + ",`kills`=" + getKills() + ",`deaths`=" + getDeaths() + ";"
         ).execute(NeoAPI.getStore());
     }

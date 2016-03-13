@@ -1,6 +1,6 @@
 package net.karolek.neoguilds.utils;
 
-import net.karolek.neoguilds.NeoConfig;
+import net.karolek.neoguilds.Config;
 
 public final class Debug {
 
@@ -8,7 +8,7 @@ public final class Debug {
     }
 
     public static boolean debug(String... strings) {
-        if (NeoConfig.DEBUG)
+        if (Config.DEBUG)
             for (String s : strings) {
                 System.out.println("[NeoGuilds] [DEBUG] > " + s);
             }
