@@ -1,5 +1,6 @@
 package net.karolek.neoguilds.api;
 
+import net.karolek.neoguilds.Commands;
 import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.Messages;
 import net.karolek.neoguilds.NeoGuilds;
@@ -37,6 +38,10 @@ public final class NeoAPI {
 
     public static Messages getMessages() {
         return getNeoGuilds().getMessages();
+    }
+
+    public static Commands getCommands() {
+        return getNeoGuilds().getCommands();
     }
 
     public static DataFactory getDataFactory() {

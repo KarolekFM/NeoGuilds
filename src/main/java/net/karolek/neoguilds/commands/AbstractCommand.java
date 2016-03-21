@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.SimplePluginManager;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter
@@ -45,6 +46,14 @@ public abstract class AbstractCommand extends Command {
         this(name, description, usage, permission, true, aliases);
     }
 
+    public AbstractCommand(String name, String description, String usage, String permission, List<String> aliases) {
+        super(name, description, usage, aliases);
+        this.name = name;
+        this.usage = usage;
+        this.description = description;
+        this.permission = permission;
+        this.onlyPlayer = true;
+    }
 
     public boolean runCommand(CommandSender sender, String[] args) throws CommandException {
         throw new CommandException("Default console void");

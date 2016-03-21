@@ -20,11 +20,11 @@ public final class SpaceUtil {
         return (x * x) + (z * z);
     }
 
-    public Set<Location> makeCylinder(Location center, double radius, int height, boolean filled) {
+    public static Set<Location> makeCylinder(Location center, double radius, int height, boolean filled) {
         return makeCylinder(center, radius, radius, height, filled);
     }
 
-    public Set<Location> makeCylinder(Location center, double radiusX, double radiusZ, int height, boolean filled) {
+    public static Set<Location> makeCylinder(Location center, double radiusX, double radiusZ, int height, boolean filled) {
 
         Set<Location> locations = new HashSet<>();
 
@@ -75,11 +75,11 @@ public final class SpaceUtil {
         return locations;
     }
 
-    public Set<Location> makeSphere(Location center, double radius, boolean filled) {
+    public static Set<Location> makeSphere(Location center, double radius, boolean filled) {
         return makeSphere(center, radius, radius, radius, filled);
     }
 
-    public Set<Location> makeSphere(Location center, double radiusX, double radiusY, double radiusZ, boolean filled) {
+    public static Set<Location> makeSphere(Location center, double radiusX, double radiusY, double radiusZ, boolean filled) {
 
         Set<Location> locations = new HashSet<>();
         Point pos = new Point(center);
@@ -146,7 +146,7 @@ public final class SpaceUtil {
         return locations;
     }
 
-    public Set<Location> makePyramid(Location center, int size, boolean filled) {
+    public static Set<Location> makePyramid(Location center, int size, boolean filled) {
 
         Set<Location> locations = new HashSet<>();
         Point pos = new Point(center);

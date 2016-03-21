@@ -3,6 +3,9 @@ package net.karolek.neoguilds;
 import net.karolek.neoguilds.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Config extends Configuration {
 
     public static boolean DEBUG = true;
@@ -28,10 +31,14 @@ public class Config extends Configuration {
 
     public static String CUBOID_WORLD = "world";
     public static int CUBOID_CRYSTAL$LEVEL = 50;
+    public static String CUBOID_CRYSTAL$BLOCK = "dragon egg";
     public static int CUBOID_SIZE_START = 24;
     public static int CUBOID_SIZE_MAX = 74;
     public static int CUBOID_SIZE_ADD = 1;
     public static int CUBOID_SIZE_BETWEEN = 50;
+
+
+    public static List<String> ITEMS_CREATE_NORMAL = Arrays.asList("64 diamond", "64 emerald");
 
 
     public Config(JavaPlugin plugin) {

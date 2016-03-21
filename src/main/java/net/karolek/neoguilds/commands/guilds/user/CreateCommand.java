@@ -1,5 +1,6 @@
 package net.karolek.neoguilds.commands.guilds.user;
 
+import net.karolek.neoguilds.Commands;
 import net.karolek.neoguilds.Config;
 import net.karolek.neoguilds.Messages;
 import net.karolek.neoguilds.api.NeoAPI;
@@ -8,12 +9,19 @@ import net.karolek.neoguilds.commands.AbstractCommand;
 import net.karolek.neoguilds.commands.exceptions.CommandException;
 import net.karolek.neoguilds.commands.exceptions.NoEnoughArgsException;
 import net.karolek.neoguilds.utils.ChatUtil;
+import net.karolek.neoguilds.utils.ItemUtil;
 import org.bukkit.entity.Player;
 
 public class CreateCommand extends AbstractCommand {
 
     public CreateCommand() {
-        super("zaloz", "tworzy nowa gildie", "zaloz <tag> <nazwa>", "neoguilds.commands.guild.create", "create");
+        super(
+                Commands.GUILD_USER_CREATE_NAME,
+                Commands.GUILD_USER_CREATE_DESCRIPTION,
+                Commands.GUILD_USER_CREATE_USAGE,
+                Commands.GUILD_USER_CREATE_PERMISSION,
+                Commands.GUILD_USER_CREATE_ALIASES
+        );
     }
 
     @Override
@@ -44,6 +52,9 @@ public class CreateCommand extends AbstractCommand {
 
         if (!NeoAPI.getGuildManager().canCreateGuild(sender.getLocation()))
             return ChatUtil.send(sender, Messages.ERROR_GUILD$NEARBY);
+
+        if (!ItemUtil.checkAndRemove(ItemUtil.getItems(Config.ITEMS_CREATE_NORMAL, 1D), sender))
+            return ChatUtil.send(sender, Messages.ERROR_DONT$HAVE$ITEMS);
 
         Guild g = NeoAPI.getGuildManager().createGuild(tag, name, sender);
 

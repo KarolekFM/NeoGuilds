@@ -20,10 +20,17 @@ public class Messages extends Configuration {
     public static String ERROR_NAME$INCORRECT$CHARACTERS = "&4Blad: &cNazwa musi byc alfanumerczna ({0})";
     public static String ERROR_GUILD$ALREADY$EXISTS = "&4Blad: &cTaka gildia juz istnieje!";
     public static String ERROR_GUILD$NEARBY = "&4Blad: &cW poblizu znajduje sie gildia!";
+    public static String ERROR_DONT$HAVE$ITEMS = "&4Blad: &cNie masz potrzebnych itemkow!";
+    public static String ERROR_DONT$HAVE$GUILD = "&4Blad: &cNie posiadasz gildii!";
+    public static String ERROR_YOU$ARENT$OWNER = "&4Blad: &cNie jestes wlascicielem gildii!";
 
     public static String INFO_GUILD$CREATED = "&cUtworzyles gildie [{0}] {1}!";
+    public static String INFO_GUILD$DELETED = "&cUsunales gildie [{0}] {1}!";
+    public static String INFO_CONFIRM$DELETE$GUILD = "&cPotwierdz usuniecie gildii: &7/g usun";
 
     public static String BROADCAST_GUILD$CREATED = "&cGildia &7[{0}] {1} &czostala utworzona przez &7{2}&c!";
+    public static String BROADCAST_GUILD$DELETED = "&cGildia &7[{0}] {1} &czostala usunieta przez &7{2}&c!";
+
 
 
     public Messages(JavaPlugin plugin, String lang) {

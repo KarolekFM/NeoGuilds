@@ -6,6 +6,7 @@ import net.karolek.neoguilds.api.data.DataFactory;
 import net.karolek.neoguilds.api.guilds.GuildManager;
 import net.karolek.neoguilds.api.guilds.data.CuboidData;
 import net.karolek.neoguilds.api.guilds.data.MembersData;
+import net.karolek.neoguilds.api.guilds.data.OtherData;
 import net.karolek.neoguilds.api.packets.PacketManager;
 import net.karolek.neoguilds.api.users.UserManager;
 import net.karolek.neoguilds.api.users.data.StatsData;
@@ -14,6 +15,7 @@ import net.karolek.neoguilds.commands.guilds.GuildCommand;
 import net.karolek.neoguilds.impl.guilds.GuildManagerImpl;
 import net.karolek.neoguilds.impl.guilds.data.CuboidDataImpl;
 import net.karolek.neoguilds.impl.guilds.data.MembersDataImpl;
+import net.karolek.neoguilds.impl.guilds.data.OtherDataImpl;
 import net.karolek.neoguilds.impl.packets.PacketManagerImpl;
 import net.karolek.neoguilds.impl.users.UserManagerImpl;
 import net.karolek.neoguilds.impl.users.data.StatsDataImpl;
@@ -30,6 +32,7 @@ public class NeoGuilds extends JavaPlugin {
     private DataFactory dataFactory;
     private Config neoConfig;
     private Messages messages;
+    private Commands commands;
     private Store store;
     private UserManager userManager;
     private PacketManager packetManager;
@@ -43,12 +46,14 @@ public class NeoGuilds extends JavaPlugin {
         NeoAPI.getDataFactory().register(TabData.class, TabDataImpl.class);
         NeoAPI.getDataFactory().register(MembersData.class, MembersDataImpl.class);
         NeoAPI.getDataFactory().register(CuboidData.class, CuboidDataImpl.class);
+        NeoAPI.getDataFactory().register(OtherData.class, OtherDataImpl.class);
     }
 
     @Override
     public void onEnable() {
         neoConfig = new Config(this);
         messages = new Messages(this, Config.LANG);
+        commands = new Commands(this, Config.LANG);
         store = Store.createMysql(new StoreTaskProvider(this), Config.STORE_MYSQL_HOST, Config.STORE_MYSQL_BASENAME, Config.STORE_MYSQL_USERNAME, Config.STORE_MYSQL_PASSWORD);
         store.setDebug(Config.DEBUG);
         userManager = new UserManagerImpl(this);

@@ -11,6 +11,7 @@ import net.karolek.neoguilds.utils.Debug;
 import net.karolek.store.Queries;
 import net.karolek.store.common.QueryCallback;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -65,6 +66,9 @@ public class GuildManagerImpl implements GuildManager {
         ).execute(NeoAPI.getStore());
         guild.getData(MembersData.class);
         guild.getData(CuboidData.class);
+
+        player.getLocation().getBlock().setType(Material.matchMaterial(Config.CUBOID_CRYSTAL$BLOCK));
+
         return guild;
     }
 
