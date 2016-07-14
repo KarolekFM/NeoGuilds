@@ -21,7 +21,7 @@ public class PacketManagerImpl implements PacketManager {
     private static Class<?> PPOPI_CLASS = Reflection.getMinecraftClass("PacketPlayOutPlayerInfo");
     private static Class<?> EPIA_CLASS = Reflection.getMinecraftClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
     private static Class<?> PID_CLASS = Reflection.getMinecraftClass("PacketPlayOutPlayerInfo$PlayerInfoData");
-    private static Class<?> EG_CLASS = Reflection.getMinecraftClass("WorldSettings$EnumGamemode");
+    private static Class<?> EG_CLASS = Reflection.getMinecraftClass("EnumGamemode");
     private static Class<?> CS_CLASS = Reflection.getMinecraftClass("IChatBaseComponent$ChatSerializer");
     private static Class<?> ICBC_CLASS = Reflection.getMinecraftClass("IChatBaseComponent");
     private static Class<?> PPOPLHF_CLASS = Reflection.getMinecraftClass("PacketPlayOutPlayerListHeaderFooter");
