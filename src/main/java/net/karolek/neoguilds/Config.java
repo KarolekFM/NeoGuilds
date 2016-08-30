@@ -12,10 +12,10 @@ public class Config extends Configuration {
 
     public static String LANG = "PL";
 
-    public static String STORE_TYPE = "mysql";
-    public static String STORE_MYSQL_HOST = "localhost:3306";
+    public static String STORE_TYPE = "mysql";                       // nie uzywasz `STORE_TYPE`. Warto by bylo jakos zabezpieczyc przed 
+    public static String STORE_MYSQL_HOST = "localhost:3306";        // CommunicationsException: Communications link failure, gdy sa podane nieprawidlowe dane, czyz nie?
     public static String STORE_MYSQL_USERNAME = "root";
-    public static String STORE_MYSQL_PASSWORD = "password";
+    public static String STORE_MYSQL_PASSWORD = "password";          // poza tym, czemu nie masz nic od tworzenia tabel jezeli ich nie ma?
     public static String STORE_MYSQL_BASENAME = "basename";
     public static String STORE_MYSQL_TABLE$PREFIX = "neoguilds_";
 
